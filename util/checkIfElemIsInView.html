@@ -1,0 +1,57 @@
+<!-- In this util function we are using scroll event to check if the #box is within the viewport or not,
+     having this check invoked on scroll event is not an efficient way, better use INTERSECTION OBSERVER-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UTIL</title>
+    <style>
+      body {
+        height: 3000px;
+        background: orange;
+      }
+      #box {
+        position: absolute;
+        top: 250px;
+        height: 100px;
+        width: 100px;
+        background-color: brown;
+        color: aliceblue;
+      }
+      #message {
+        width: 100%;
+        text-align: center;
+        position: fixed;
+        top: 0px;
+        color: aliceblue;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <p id="message"></p>
+    <div id="box"></div>
+  </body>
+
+  <script>
+    document.addEventListener("scroll", function () {
+      //get window coordinates of #box
+      let wcoords = window.box.getBoundingClientRect();
+
+      //check if #box is within viewport
+      if (
+        wcoords.top >= 0 &&
+        wcoords.top <= document.documentElement.clientHeight &&
+        wcoords.left >= 0 &&
+        wcoords.left <= document.documentElement.clientWidth
+      ) {
+        window.message.textContent = "In VIEW";
+      } else {
+        window.message.textContent = "NOT In VIEW";
+      }
+    });
+  </script>
+</html>

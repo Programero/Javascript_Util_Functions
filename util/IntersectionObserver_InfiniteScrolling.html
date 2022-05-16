@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Infinite Scrolling</title>
+  </head>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      background-color: aliceblue;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    ul {
+      height: 70vh;
+      width: 60vw;
+      margin: auto;
+      background-color: aquamarine;
+      list-style-position: outside;
+      list-style-type: none;
+      padding: 0px;
+      overflow-y: auto;
+    }
+    ul > li {
+      padding: 50px;
+      text-align: center;
+      background-color: blanchedalmond;
+      color: #333333;
+      margin: 20px;
+      border-radius: 20px;
+    }
+  </style>
+  <body>
+    <ul id="list-container"></ul>
+  </body>
+  <script>
+    console.log(window.innerHeight);
+    document.body.style.height = window.innerHeight + "px";
+
+    let threshold = 10;
+    let attr = {
+      start: 0,
+      end: threshold,
+    };
+    let listContainer = document.querySelector("#list-container");
+
+    //initially load first threshold number of items and let last item have id = bottom and have intersectionObserver Observe this last li
+    for (let i = attr.start; i < attr.end; i++) {
+      let newLiElem = document.createElement("li");
+      newLiElem.textContent = i;
+      listContainer.append(newLiElem);
+    }
+    listContainer.lastElementChild.id = "bottom";
+
+    attr.start = attr.start + threshold;
+    attr.end = attr.end + threshold;
+
+    //define intersection observer
+    const options = {
+      root: listContainer,
+      rootMargin: "0px",
+      threshold: [0],
+    };
+    let intersectionObserver = new IntersectionObserver((entries, Observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          let liElem = entry.target;
+
+          liElem.id = "";
+
+          //add more li by doing setTimeOut mimicking network request
+          setTimeout(() => {
+            for (let i = attr.start; i < attr.end; i++) {
+              let newLiElem = document.createElement("li");
+              newLiElem.textContent = i;
+              listContainer.append(newLiElem);
+            }
+            listContainer.lastElementChild.id = "bottom";
+
+            attr.start = attr.start + threshold;
+            attr.end = attr.end + threshold;
+
+            Observer.observe(listContainer.lastElementChild);
+            Observer.unobserve(liElem);
+          }, 500);
+        }
+      });
+    }, options);
+
+    intersectionObserver.observe(listContainer.lastElementChild);
+  </script>
+</html>

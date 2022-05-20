@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Debouncing</title>
+  </head>
+  <script>
+    let globalCount = 0;
+    function actionToPerform(event) {
+      globalCount++;
+      window.message.innerHTML =
+        "input changed to: " +
+        event.target.value +
+        "<br>" +
+        " action performed for: " +
+        globalCount +
+        " number of times";
+    }
+
+    ////////////////////////////////////----------------------------MAIN THROTTLING FUNCTION -----------------------///////////////
+    let throttle = (inputFunc, delay) => {
+      let timerId;
+      return (event) => {
+        if (timerId) {
+          return;
+        }
+        timerId = setTimeout(() => {
+          inputFunc.call(this, event);
+          timerId = null;
+        }, delay);
+      };
+    };
+
+    window.addEventListener("DOMContentLoaded", () => {
+      alert("DOM CONTENT LOADED");
+      window.search.addEventListener("input", throttle(actionToPerform, 1000));
+    });
+  </script>
+  <body>
+    <input type="text" name="search" id="search" />
+    <p id="message"></p>
+  </body>
+</html>

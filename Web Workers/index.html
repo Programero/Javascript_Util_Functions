@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Workers</title>
+  </head>
+  <body>
+    <div>
+      <h3>Prime Numbers: <span id="count"></span></h3>
+      <button id="getprime">Get next Prime</button>
+      <button id="clear">Clear Worker</button>
+    </div>
+
+    <script>
+      let w;
+      let primeNumbers = [];
+      if (window.Worker) {
+        w = new Worker("./worker.js");
+      }
+
+      document.getElementById("getprime").addEventListener("click", (e) => {
+        w.postMessage("getprime");
+      });
+      document.getElementById("clear").addEventListener("click", (e) => {
+        w.postMessage("clear");
+      });
+
+      w.addEventListener("message", (e) => {
+        console.log("message came from worker: ", e);
+        primeNumbers.push(e.data);
+        document.getElementById("count").textContent = primeNumbers;
+      });
+    </script>
+  </body>
+</html>

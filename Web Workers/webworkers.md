@@ -50,4 +50,4 @@ Main Page script and worker thread script communicate using messages
 
 ## How to stop a web worker
 
-There are two ways to stop a worker: by calling worker.terminate() from the main page or by calling self.close() inside of the worker itself.
+There are two ways to stop a worker: by calling **worker.terminate()** from the main page or by calling **self.close()** inside of the worker itself.
